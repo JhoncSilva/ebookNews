@@ -15,8 +15,8 @@ export default function Newsletter() {
       email, nome 
     })
     .then( 
-      (response) => { alert("Usuário registrado com sucesso!"), router.replace('/')},
-      (error) => { console.log(error), alert("Tivemos algum problema com o cadastro, por favor, tente novamente!", router.replace('/newsletter'))  }
+      (response) => { alert("Usuário registrado com sucesso!"), console.log(response), router.replace('/')},
+      (error) => { alert("Tivemos algum problema com o cadastro, por favor, tente novamente!"), console.log(error), router.replace('/newsletter')},
     );
   }
 
