@@ -26,8 +26,9 @@ export default function Newsletter() {
         <title>Assinar</title>
         <link rel="shortcut icon" href="/icon.svg" type="image/x-icon" />
       </Head>
+      
 
-      <main className="py-28 w-full min-h-screen bg-blue-50">
+      <main className="py-28 w-full min-h-screen">
         <div className="max-w-sm mgauto p-4 md:max-w-lg">
           <h1 className="text-center font-bold text-2xl mb-4">Inscreva-se!</h1>
 
