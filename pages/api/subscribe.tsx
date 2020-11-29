@@ -1,40 +1,29 @@
 import { NowRequest, NowResponse } from '@vercel/node'
-import { MongoClient, Db } from 'mongodb'
-import url from 'url';
-
-let cachedDb: Db = null;
-
-async function connectToDatabase(uri: string) {
-  if (cachedDb) {
-    return cachedDb;
-  }
-
-  const client = await MongoClient.connect(uri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
-
-  const dbName = url.parse(uri).pathname.substr(1);
-
-  const db = client.db(dbName);
-
-  cachedDb = db;
-
-  return db;
-}
+import connectToDatabase from '../../utils/database'
 
 export default async (request: NowRequest, response: NowResponse) => {
-  const { email, nome} = request.body;
+  if (request.method === 'POST') {
+    const { email, nome } = request.body;
 
-  const db = await connectToDatabase(process.env.MONGODB_URI);
+    if (!nome || !email) {
+      response.status(400).json({ message: 'Erro, informação incompleta!' })
+      return;
+    }
 
-  const collection = db.collection('subscribers');
+    const db = await connectToDatabase(process.env.MONGODB_URI);
 
-  await collection.insertOne({
-    nome,
-    email,
-    subscribedAt: new Date(),
-  })
+    const collection = db.collection('subscribers');
 
-  return response.status(201).json({ message: `usuário criado com sucesso` });
+    await collection.insertOne({
+      nome,
+      email,
+      subscribedAt: new Date(),
+    })
+
+    return response.status(201).json({ message: `usuário criado com sucesso` });
+  }
+
+  else {
+    response.status(400).json({ message: 'Erro no método da requisição!' })
+  }
 }
